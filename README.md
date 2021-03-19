@@ -28,6 +28,7 @@ Follow the instructions below to display your accelerometer's data.
 <br>
 
 ### Prerequisites
+<br>
 
 #### Download and configure kdb+/q
 
@@ -38,9 +39,6 @@ To download and configure kdb+/q, follow this [link](https://kx.com/developers/#
 
 To download KX Dashboards, follow this [link](https://code.kx.com/dashboards/gettingstarted/).
 <br>
-
-#### Ensure Bluetoothd is running
-
 
 This project uses CLI commands which have been depreciated in later versions of Linux. This project assumes that these tools are installed on your local machine but it notes alternative commands that can be used when appropriate.
 <br>
@@ -235,7 +233,7 @@ picocom /dev/rfcomm0 -b 115200 > stream.txt
 
 ### Operation
 
-> **Note**: The [stream scripts](#start-and-record-the-accelerometer's-stream) run in the background see can be ran in the same terminal, however the [kdb+ server](#bring-up-the-kdb+-server) and [KX Dashboards server](#bring-up-the-kx-dashboards-server) run in the foreground so 2 terminal tabs are required.
+> **Note**: The [stream scripts](#start-and-record-the-accelerometer's-stream) run in the background so can be ran in the same terminal, however the [kdb+ server](#bring-up-the-kdb+-server) and [KX Dashboards server](#bring-up-the-kx-dashboards-server) run in the foreground so 2 terminal tabs are required.
 
 Follow the steps below to display your accelerometer's stream.
 <br>
