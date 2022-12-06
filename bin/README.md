@@ -1,51 +1,16 @@
 # Reverse Engineering WitMotion BWT901CL Accelerometer
 
-This project is concerned with reverse engineering the WitMotion BWT901CL accelerometer to enable its feed to be ingested through the kdb+ TICK architecture.
-<br>
-
-### Disclaimer
-
-> This project was developed using:
-> + `WitMotion BWT901CL accelerometer`
-> + `Linux`
-> + `Windows`
-> + `kdb+/q`
-> + `KX Dashboards`
-<br>
-
-The project was developed on Linux Ubuntu 16.04 LTS and Windows 10 build 19043.
-
-> *This software was last ran on 19/01/2022.*
-<br>
-
-## Introduction
-
-This package allows users to display stream information including acceleration, angular velocity and angle from the WitMotion BWT901CL accelerometer through KX Dashboards.
-<br>
-
 ## Getting Started
 
 Follow the instructions below to display your accelerometer's data.
 <br>
 
 ### Prerequisites
+
 <br>
 
-#### Download and configure kdb+/q
-
-To download and configure kdb+/q, follow this [link](https://kx.com/developers/#download).
+This project uses CLI commands which have been depreciated in later versions of Linux. This project assumes that these tools are installed on your local machine but it notes alternative commands that can be used when appropriate.
 <br>
-
-#### Download KX Dashboards
-
-To download KX Dashboards, follow this [link](https://code.kx.com/dashboards/gettingstarted/).
-<br>
-
-#### Download and configure hexdump *(Windows only)*
-
-To download and configure hexdump for Windows, follow this [link](https://www.di-mgt.com.au/hexdump-for-windows.html).
-<br>
-
 
 #### Elevate permissions to root
 
@@ -56,6 +21,7 @@ Run the super user command and enter your password when prompted:
 sudo su
 
 ```
+
 <br>
 
 #### Ensure Bluetoothd is running
@@ -67,7 +33,9 @@ Run the system command to bring up your Bluetooth daemon service:
 systemctl start bluetoothd
 
 ```
-*or*
+
+_or_
+
 ```
 
 service bluetoothd start
@@ -81,7 +49,9 @@ To check bluetoothd is running, run the following:
 systemctl status bluetoothd
 
 ```
-*or*
+
+_or_
+
 ```
 
 service bluetoothd status
@@ -103,6 +73,7 @@ You should get a read out like:
            └─2434 /usr/lib/bluetooth/bluetoothd
 
 ```
+
 <br>
 
 #### Ensure Bluetooth adaptor is up
@@ -131,6 +102,7 @@ Devices:
         hci0    74:DF:BF:37:DA:C0
 
 ```
+
 <br>
 
 ### Installation
@@ -138,25 +110,26 @@ Devices:
 To install this project on your local machine, follow these instructions:
 
 1. Clone this repo to your local machine:
+
 ```
 
 git clone <HTTPS URL>/witmotion-bwt901cl-accelerometer-reverse-engineer.git /path/to/proj/
 
 ```
+
 <br>
 
 2. Turn on your accelerometer.
-<br>
-
+   <br>
 
 ### Configuration
 
 To configure this application follow these steps.
 <br>
 
-
 ##### Discover your BWT901CL accelerometer's MAC address
-___
+
+---
 
 In a Linux terminal run the following commands:
 
@@ -165,31 +138,41 @@ In a Linux terminal run the following commands:
 bluetoothctl
 
 ```
-*then in the Bluetooth controller prompt*
+
+_then in the Bluetooth controller prompt_
+
 ```
 
 scan on
 
 ```
-*then after a few seconds*
+
+_then after a few seconds_
+
 ```
 
 scan off
 
 ```
-*finally, search through the printed MAC addresses for the accelerometer's, it should look something like this*
+
+_finally, search through the printed MAC addresses for the accelerometer's, it should look something like this_
+
 ```
 
 [NEW] Device 20:20:08:24:49:23  HC-06
 
 ```
-*or*
+
+_or_
+
 ```
 
 hcitool scan
 
 ```
-*then search through the printed MAC addresses for the accelerometer's, it should look something like this*
+
+_then search through the printed MAC addresses for the accelerometer's, it should look something like this_
+
 ```
 
 [NEW] Device 20:20:08:24:49:23  HC-06
@@ -197,7 +180,7 @@ hcitool scan
 ```
 
 > **Note:** If the accelerometer was undetected, run the above command with lescan rather than scan.
-<br>
+> <br>
 
 ##### Verify your BWT901CL accelerometer
 
@@ -220,6 +203,7 @@ Requesting information ...
         Features: 0x39 0x00 0x00 0x00 0x00 0x00 0x00 0x00
 
 ```
+
 <br>
 
 ##### Alter the script to point to your BWT901CL accelerometer's MAC address
@@ -233,6 +217,7 @@ rfcomm bind rfcomm0 20:20:08:24:49:23
 picocom /dev/rfcomm0 -b 115200 > stream.txt
 
 ```
+
 <br>
 
 ### Operation
@@ -245,36 +230,43 @@ Follow the steps below to display your accelerometer's stream.
 #### Start and record the accelerometer's stream
 
 Run the corresponding script:
+
 ```
 
 sh ./bin/init.sh &
 
 ```
+
 <br>
 
 #### Parse the accelerometer's stream
 
 Run the corresponding script:
+
 ```
 
 sh ./bin/parse.sh &
 
 ```
+
 <br>
 
 #### Bring up the kdb+ server
 
 Run the corresponding script:
+
 ```
 
 q ./q/init.q
 
 ```
+
 <br>
 
 #### Bring up the KX Dashboards server
 
 Run the corresponding script:
+
 ```
 
 q dash.q -p 10001 -u 1
@@ -282,18 +274,124 @@ q dash.q -p 10001 -u 1
 ```
 
 > **Note**: This must be ran inside the [KX Dashboards folder](#download-kx-dashboards).
-<br>
+> <br>
 
 #### Configure a dashboard
 
 To configure your data connection and UI components, follow this [video](https://www.youtube.com/watch?v=yKzFR2Knq3c).
 
 > **Note**: The port used for the kdb server is 6010.
-<br>
+> <br>
 
 ## Issues
 
 #### No Bluetooth adaptors detected
+
+If running the following command:
+
+```
+
+
+
+```
+
+Results in:
+
+```
+
+.
+
+```
+
+The specified service does not exist as an installed service -- means Bluetooth is off
+<br>
+
+#### Access to the port COMx is denied
+
+If running the following command:
+
+```
+
+
+
+```
+
+Results in:
+
+```
+
+.
+
+```
+
+Access to the port 'COM4' is denied -- start back here, remove com4 (bluetooth more options)
+remove COMn in more BT options, rerun
+<br>
+
+#### System Error. Code: 87
+
+If running the following command:
+
+```
+
+
+
+```
+
+Results in:
+
+```
+
+.
+
+```
+
+System Error. Code: 87. The parameter is incorrect -- look at Bluetooth advanced, COMn already setup, otherwise restart BT and try again
+<br>
+
+#### The port 'COM3' does not exist
+
+If running the following command:
+
+```
+
+
+
+```
+
+Results in:
+
+```
+
+.
+
+```
+
+"The port 'COM3' does not exist. -- means COM port isn't correct, run/check in BT options -- if null check device manager for RFCOMM error, try unpairing and repairing device, otherwise seek online help
+<br>
+
+#### A device which does not exist was specified
+
+If running the following command:
+
+```
+
+
+
+```
+
+Results in:
+
+```
+
+.
+
+```
+
+A device which does not exist was specified -- means COM port not setup, return to btcom
+<br>
+
+#### The port is already open
 
 If running the following command:
 
@@ -313,11 +411,9 @@ Devices:
 
 ```
 
-Your Linux OS does not recongise any Bluetooth adaptors. 
-This is likely if you are running Linux non-natively, i.e. Virtual Machine, virtualisation, etc.
-Install Linux natively as a dual-boot OS or seek online advice.
+The port is already open -- device has lost connection (computer locks, etc), port.close() and port.open
 <br>
 
-## Author
+# advanced BT shows COMn outgoing
 
-[Marc Templeton](https://github.com/jurassic-marc) | [LinkedIn](https://www.linkedin.com/in/marc-templeton/) | [Medium](https://medium.com/@marctempleton)
+# $port = new-Object System.IO.Ports.SerialPort ([System.IO.Ports.SerialPort]::GetPortNames()[0]),115200 -- assumes only port opened is outgoing and 1 we want, can change to your port -- advanced BT
